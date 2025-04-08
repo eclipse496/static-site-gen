@@ -48,6 +48,7 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
         if node.text_type != TextType.TEXT:
             new_nodes.append(node)
             continue
+        split_nodes = []
         split_string = node.text.split(delimiter)
         if len(split_string) == 1:
             # no delimiter found
@@ -59,8 +60,11 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
         for i, str in enumerate(split_string):
             # even i = outside delimiter
             # odd i = inside delimiter
+            if split_string[i] == "":
+                continue
             if i % 2 == 0:
-                new_nodes.append(TextNode(str, TextType.TEXT))
+                split_nodes.append(TextNode(str, TextType.TEXT))
             else:
-                new_nodes.append(TextNode(str, text_type))
+                split_nodes.append(TextNode(str, text_type))
+        new_nodes.extend(split_nodes)
     return new_nodes
